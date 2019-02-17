@@ -1,0 +1,43 @@
+defaultEntryPoints = ["http", "https"]
+
+[entryPoints]
+  [entryPoints.dashboard]
+    address = ":8080"
+    [entryPoints.dashboard.auth]
+      [entryPoints.dashboard.auth.basic]
+        users = ["admin:your_encrypted_password"]
+  [entryPoints.http]
+    address = ":80"
+      [entryPoints.http.redirect]
+        entryPoint = "https"
+  [entryPoints.https]
+    address = ":443"
+      [entryPoints.http.tls]
+
+[api]
+entrypoint="dashboard"
+
+[acme]
+email = "your_email@your_domain"
+storage = "acme.json"
+entryPoint = "https"
+onHostRule = true
+[acme.tlsChallenge]
+[acme.dnsChallenge]
+  resolvers = ["1.1.1.1:53", "8.8.8.8:53"]
+  provider = "cloudflare"
+  CF_API_EMAIL = ""
+  CF_API_KEY = ""
+  # provider = "route53"
+  # AWS_ACCESS_KEY_ID = ""
+  # AWS_SECRET_ACCESS_KEY = ""
+  # AWS_REGION = ""
+  # AWS_HOSTED_ZONE_ID = ""
+  [[acme.domains]]
+    main = "*.mydomain.com"
+    sans = "mydomain.com"
+
+[docker]
+domain = "mydomain.com"
+watch = true
+network = "web"

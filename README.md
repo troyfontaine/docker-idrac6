@@ -12,7 +12,7 @@ Allows access to the iDRAC 6 console without installing Java or messing with Jav
 
 Container is based on [baseimage-gui](https://github.com/jlesage/docker-baseimage-gui) by [jlesage](https://github.com/jlesage)
 
-# Usage
+## Usage
 
 See the docker-compose [here](https://github.com/DomiStyle/docker-idrac6/blob/master/docker-compose.yml) or use this command:
 
@@ -45,12 +45,13 @@ Make sure the container user has read & write permission to these folders on the
 
 ## Issues & limitations
 
-* ~Libraries are not loaded correctly~
-  * ~Causes error message on start~
-  * ~"Pass all keystrokes to server", "Single Cursor" and "Virtual Media" is not available until fixed~
 * User preferences can't be saved
 * VNC starts with default 1024x768 resolution instead of fullscreen
   * Use "View" -> "Full Screen" to work around this issue
 * Keyboard layout can't be changed
 * Only one iDRAC server can be accessed with a single instance
   * Run multiple containers to work around this issue (e.g. srv1.idrac.example.org, srv2.idrac.example.org)
+
+## Traefik Setup
+
+Traefik is a pretty wicked reverse proxy solution.  A good tutorial can be found at [Digital Ocean](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-as-a-reverse-proxy-for-docker-containers-on-debian-9).  Note: htpasswd is included with macOS.
