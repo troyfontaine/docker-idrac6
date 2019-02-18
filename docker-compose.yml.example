@@ -1,0 +1,64 @@
+version: '3.6'
+
+networks:
+  web:
+
+services:
+  reverse-proxy:
+    image: traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8443:8443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./acme.json:/acme.json:rw
+      - ./traefik.toml:/traefik.toml:ro
+    labels:
+      - traefik.frontend.rule=Host:monitor.mydomain.com
+    env_file: ./traefik.env
+    networks:
+      - web
+  idrac1:
+    image: domistyle/idrac6
+    restart: unless-stopped
+    labels:
+      - traefik.backend=idrac1
+      - traefik.frontend.rule=Host:idrac1.mydomain.com
+      - traefik.docker.network=web
+      - traefik.port=5800
+    env_file: ./idrac1.env
+    volumes:
+      - ./media:/vmedia
+      - ./screenshots:/screenshots
+    networks:
+      - web
+  idrac2:
+    image: domistyle/idrac6
+    restart: unless-stopped
+    labels:
+      - traefik.backend=idrac2
+      - traefik.frontend.rule=Host:idrac2.mydomain.com
+      - traefik.docker.network=web
+      - traefik.port=5800
+    env_file: ./idrac2.env
+    volumes:
+      - ./media:/vmedia
+      - ./screenshots:/screenshots
+    networks:
+      - web
+  idrac3:
+    image: domistyle/idrac6
+    restart: unless-stopped
+    labels:
+      - traefik.backend=idrac3
+      - traefik.frontend.rule=Host:idrac3.mydomain.com
+      - traefik.docker.network=web
+      - traefik.port=5800
+    env_file: ./idrac3.env
+    volumes:
+      - ./media:/vmedia
+      - ./screenshots:/screenshots
+    networks:
+      - web

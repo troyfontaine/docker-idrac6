@@ -1,1 +1,6 @@
 traefik.toml
+traefik.env
+idrac*.env
+docker-compose.yml
+docker-compose.yaml
+acme.json

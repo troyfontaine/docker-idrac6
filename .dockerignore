@@ -1,0 +1,5 @@
+traefik.toml.example
+docker-compose.yml
+README.md
+LICENSE
+.git*

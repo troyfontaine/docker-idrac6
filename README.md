@@ -14,7 +14,7 @@ Container is based on [baseimage-gui](https://github.com/jlesage/docker-baseimag
 
 ## Usage
 
-See the docker-compose [here](https://github.com/DomiStyle/docker-idrac6/blob/master/docker-compose.yml) or use this command:
+See the docker-compose [here](https://github.com/troyfontaine/docker-idrac6/blob/master/docker-compose.yml.example) or use this command:
 
     docker run -d -p 5800:5800 -p 5900:5900 -e IDRAC_HOST=idrac1.example.org -e IDRAC_USER=root -e IDRAC_PASSWORD=1234 domistyle/idrac6
 
@@ -43,6 +43,8 @@ All listed configuration variables are required.
 
 Make sure the container user has read & write permission to these folders on the host. [More info here](https://github.com/jlesage/docker-baseimage-gui#usergroup-ids).
 
+The `docker-compose.yml.example` included mounts the local directory media at `/vmedia`, so if you're needing to mount an ISO image, you can place it there to get up and running quickly.
+
 ## Issues & limitations
 
 * User preferences can't be saved
@@ -54,4 +56,28 @@ Make sure the container user has read & write permission to these folders on the
 
 ## Traefik Setup
 
-Traefik is a pretty wicked reverse proxy solution.  A good tutorial can be found at [Digital Ocean](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-as-a-reverse-proxy-for-docker-containers-on-debian-9).  Note: htpasswd is included with macOS.
+Traefik is a pretty wicked reverse proxy solution.  A good tutorial can be found at [Digital Ocean](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-as-a-reverse-proxy-for-docker-containers-on-debian-9).  Note: htpasswd is included with macOS, so you can use that to generate the credentials to use with Traefik's dashboard or the iDRAC interfaces.
+
+### Example Files
+
+There are several example files included in this repo that you need to copy to create the files to use.  You must modify these to fit your environment.
+
+| Example file | Proper Name | Purpose |
+| --- | --- | --- |
+| acme.json.example | acme.json | Leave this empty-this is for caching the acme configuration. |
+| docker-compose.yml.example | docker-compose.yml | This is the docker-compose file pre-configured for use with three separate iDRAC hosts. |
+| idrac.env.example | idrac1.env | Example file for passing the idrac credentials and hostname to a container. |
+| traefik.env.example | traefik.env | Example environment configuration file for storing the credentials for your DNS provider to use for requesting Let's Encrypt certificates.  The example includes the required environment files for Cloudflare. |
+| traefik.toml.example | traefik.toml | Example traefik configuration file. |
+
+### Configuring
+
+You will need to modify the `docker-compose` example to match the number of iDRAC hosts you have-by default it is configured for three hosts.  Simply copy one of the existing idrac configurations to add more or remove them as needed.
+
+You will need to have an appropriate `idrac#.env` file for each occurrence you have in your `docker-compose.yml`.
+
+Customizing the `traefik.toml` requires creating new user entries with the htpasswd utility.  The credentials used in the example file literally have the password `password`.  Please, do not reuse them.
+
+In the `[acme]` section, you need to update the email address used, modify the `main` entry under `[[acme.domains]]` section to match your internal domain (this requests a wildcard certificate, you can change this to use a specific host name and Subject Alternative Name-see the Traefik docs for more details).
+
+Lastly, configure the `[docker]` section to reflect your internal domain.
