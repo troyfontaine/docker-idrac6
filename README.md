@@ -58,6 +58,12 @@ The `docker-compose.yml.example` included mounts the local directory media at `/
 
 Traefik is a pretty wicked reverse proxy solution.  A good tutorial can be found at [Digital Ocean](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-as-a-reverse-proxy-for-docker-containers-on-debian-9).  Note: htpasswd is included with macOS, so you can use that to generate the credentials to use with Traefik's dashboard or the iDRAC interfaces.
 
+### Caveats
+
+It may take up to 2 minutes for the proper certificates to be retrieved when you begin-don't panic!
+
+Also, note that you cannot use a LE certificate on the admin interface due to design limitations in Traefik 1.x.
+
 ### Example Files
 
 There are several example files included in this repo that you need to copy to create the files to use.  You must modify these to fit your environment.
